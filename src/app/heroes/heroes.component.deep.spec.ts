@@ -127,5 +127,21 @@ describe('HeroComponent (shallow tests)', () => {
 
     });
 
+    //Testing Router Link
+    it('should have the correct route for the first hero', () => {
+        mockHeroService.getHeroes.and.returnValue(of(HEROES));
+        //run ngOninit
+        fixture.detectChanges();
+        const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+
+        let routerLink = heroComponents[0]
+            .query(By.directive(RouterLinkDirectiveStub))
+            .injector.get(RouterLinkDirectiveStub);
+        
+        heroComponents[0].query(By.css('a')).triggerEventHandler('click', null);
+
+        expect(routerLink.navigatedTo).toBe('/detail/1');
+    })
+
 
 })
