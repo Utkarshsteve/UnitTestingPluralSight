@@ -48,8 +48,9 @@ describe('HeroComponent (shallow tests)', () => {
         }
     });
 
+    //Triggering Events on Elements
     it(`should call heroService.deleteHero when the Hero Component's
-        delete button is clicked`,() => {
+        delete button is clicked using Triggering Events on Elements`,() => {
         spyOn(fixture.componentInstance, 'delete')
         mockHeroService.getHeroes.and.returnValue(of(HEROES));
 
@@ -62,5 +63,36 @@ describe('HeroComponent (shallow tests)', () => {
 
         expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
 
-        })
+        });
+
+    //Emitting Events from Children
+    it(`should call heroService.deleteHero when the Hero Component's
+        delete button is clicked using Emitting events from children`,() => {
+        spyOn(fixture.componentInstance, 'delete')
+        mockHeroService.getHeroes.and.returnValue(of(HEROES));
+
+        //run ngOninit
+        fixture.detectChanges(); 
+
+        const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+        (<HeroComponent>heroComponents[1].componentInstance).delete.emit(undefined);
+
+        expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[1]);
+
+        });
+
+    it(`should call heroService.deleteHero when the Hero Component's
+        delete button is clicked using Raising Events on Child directives`,() => {
+        spyOn(fixture.componentInstance, 'delete')
+        mockHeroService.getHeroes.and.returnValue(of(HEROES));
+
+        //run ngOninit
+        fixture.detectChanges(); 
+
+        const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+        heroComponents[2].triggerEventHandler('delete', null);
+
+        expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[2]);
+
+        });    
 })
