@@ -5,6 +5,7 @@ import { Location } from '@angular/common';
 import { Hero }         from '../hero';
 import { HeroService }  from '../hero.service';
 import { time } from 'console';
+import { resolve } from 'url';
 
 @Component({
   selector: 'app-hero-detail',
@@ -34,13 +35,20 @@ export class HeroDetailComponent implements OnInit {
     this.location.back();
   }
 
- save(): void {
+  save(): void {
+    var p = new Promise<void>((resolve) => {
+      this.heroService.updateHero(this.hero)
+          .subscribe(() => this.goBack());
+      resolve();
+    });
+  }
+ /*save(): void {
    debounce(() => {
     this.heroService.updateHero(this.hero)
       .subscribe(() => this.goBack());
    }, 250, false)();
     
-  }
+  }*/
 }
 
   function debounce(func, wait, immediate) {

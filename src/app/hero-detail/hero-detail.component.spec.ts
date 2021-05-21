@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, flush, TestBed } from "@angular/core/testing"
+import { async, ComponentFixture, fakeAsync, flush, TestBed } from "@angular/core/testing"
 import { ActivatedRoute } from "@angular/router";
 import { HeroService } from "../hero.service";
 import { HeroDetailComponent } from "./hero-detail.component";
@@ -41,8 +41,22 @@ describe('HeroDetailComponent', () => {
         expect(fixture.nativeElement.querySelector('h2').textContent).toContain('SUPERW');
     });
 
+    // Async helper function    
+    it('should call updateHero when save is called using fake Async function', async(() => {
+        mockHeroService.updateHero.and.returnValue(of({}));
+        fixture.detectChanges();
+
+        fixture.componentInstance.save();
+        
+        fixture.whenStable().then(() => {
+            expect(mockHeroService.updateHero).toHaveBeenCalled();
+        });
+        
+        
+    }));
+
     // Fake Async function    
-    it('should call updateHero when save is called using fake Async function', fakeAsync(() => {
+   /* it('should call updateHero when save is called using fake Async function', fakeAsync(() => {
         mockHeroService.updateHero.and.returnValue(of({}));
         fixture.detectChanges();
 
@@ -52,7 +66,7 @@ describe('HeroDetailComponent', () => {
 
         expect(mockHeroService.updateHero).toHaveBeenCalled();
         
-    }))
+    }))*/
 
     // Basic Async Testing
   /* it('should call updateHero when save is called', (done) => {
